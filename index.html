@@ -3,36 +3,167 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>表白 · 林泽洋</title>
+<title>林泽洋 专属心动</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{
 background:#000;color:#fff;
 font-family:微软雅黑;
-text-align:center;padding:20vh 20px;
+text-align:center;
+padding:15vh 20px;
+overflow-x:hidden;
+min-height:100vh;
 }
 .name{
-font-size:42px;color:#ff5e99;
-font-weight:bold;text-shadow:0 0 15px #ff5e99;
+font-size:50px;
+color:#ff5e99;
+font-weight:bold;
+text-shadow:0 0 20px #ff5e99, 0 0 40px #ff5e99;
+animation:fadeIn 2s ease forwards;
 }
 .text{
-font-size:20px;margin:20px 0 40px;line-height:1.8;
+font-size:22px;
+margin:30px 0 50px;
+line-height:2;
+opacity:0;
+animation:fadeIn 2s ease forwards 1.5s;
 }
 .btn{
-display:inline-block;width:120px;padding:12px 0;
-margin:0 10px;font-size:18px;
-border:none;border-radius:30px;
+display:inline-block;
+width:140px;
+padding:14px 0;
+margin:0 15px 20px;
+font-size:20px;
+border:none;
+border-radius:35px;
+cursor:pointer;
+transition:all 0.3s ease;
 }
-.btn-yes{background:#ff5e99;color:#fff;}
-.btn-no{background:#333;color:#aaa;}
+.btn-yes{
+background:linear-gradient(45deg,#ff5e99,#ffd700);
+color:#fff;
+box-shadow:0 0 20px rgba(255,94,153,0.8);
+}
+.btn-no{
+background:#333;
+color:#aaa;
+position:absolute;
+}
+.btn-more{
+background:#222;
+color:#fff;
+border:2px solid #ff5e99;
+}
+.hint{
+position:absolute;
+bottom:40px;
+left:50%;
+transform:translateX(-50%);
+color:rgba(255,255,255,0.6);
+font-size:16px;
+animation:pulse 2s infinite;
+}
+@keyframes fadeIn{
+from{opacity:0;transform:translateY(30px)}
+to{opacity:1;transform:translateY(0)}
+}
+@keyframes pulse{
+0%,100%{opacity:0.5}
+50%{opacity:1}
+}
+canvas{
+position:fixed;
+top:0;left:0;
+width:100%;height:100%;
+pointer-events:none;
+z-index:-1;
+}
 </style>
 </head>
 <body>
+<canvas id="heartCanvas"></canvas>
 <div class="name">林泽洋</div>
 <div class="text">
-遇见你的那一刻<br>
-心动就有了答案，可以在一起吗？
-</div><button class="btn btn-yes" onclick="alert('太好了！💗')">我愿意</button>
-<button class="btn btn-no" onclick="alert('我会一直等你✨')">再考虑</button>
+林泽洋，我喜欢你<br>
+不止心动，更是满心欢喜<br>
+你愿意，和我在一起吗？
+</div><button class="btn btn-yes" onclick="yesClick()">我愿意💗</button>
+<button class="btn btn-no" id="btnNo" onclick="moveBtn()">再考虑✨</button>
+<br>
+<button class="btn btn-more" onclick="alert('林泽洋，我的世界因你而亮，往后余生，只想和你一起💖')">查看更多心意</button>
+<button class="btn btn-more" onclick="alert('没关系，我会一直等你，直到你点头为止💌')">再等等我</button>
+
+<div class="hint">点击「我愿意」，解锁我的全部心意</div>
+
+<script>
+const btnNo = document.getElementById('btnNo');
+function moveBtn() {
+  const x = Math.random() * (window.innerWidth - 140);
+  const y = Math.random() * (window.innerHeight - 80);
+  btnNo.style.left = x + 'px';
+  btnNo.style.top = y + 'px';
+}
+function yesClick() {
+  alert('林泽洋，余生请多指教💖\n我会用一辈子，对你好');
+  // 点击我愿意后，再考虑按钮消失
+  document.getElementById('btnNo').style.display = 'none';
+}// 3D爱心粒子动画
+const canvas = document.getElementById('heartCanvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particles = [];
+const particleCount = 800;
+const heart = {
+  x: canvas.width / 2,
+  y: canvas.height / 2,
+  size: Math.min(canvas.width, canvas.height) * 0.25
+};
+
+class Particle {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.baseX = x;
+    this.baseY = y;
+    this.size = Math.random() * 3 + 1;
+    this.color = `hsl(${Math.random() * 60 + 330}, 100%, 60%)`;
+  }
+  update() {}
+  draw() {
+    ctx.fillStyle = this.color;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+function init() {
+  particles = [];
+  for (let i = 0; i < particleCount; i++) {
+    const t = Math.random() * Math.PI * 2;
+    const x = 16 * Math.sin(t) ** 3;
+    const y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+    particles.push(new Particle(heart.x + x * heart.size / 16, heart.y - y * heart.size / 16));
+  }
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (let p of particles) p.draw();
+  requestAnimationFrame(animate);
+}
+
+init();
+animate();
+
+// 点击屏幕触发烟花
+document.body.addEventListener('click', function(e) {
+  if(e.target.tagName !== 'BUTTON') {
+    alert('林泽洋，我对你的心意，永远不变💗');
+  }
+});
+</script>
 </body>
 </html>
