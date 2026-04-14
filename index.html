@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>告白</title>
+<title>给林泽洋的告白</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{
@@ -20,11 +20,7 @@ transform:rotate(45deg);
 animation:float 3s infinite
 }
 .heart::before,.heart::after{
-content:'';
-width:20px;height:20px;
-background:#ff3e6c;
-border-radius:50%;
-position:absolute
+content:'';width:20px;height:20px;background:#ff3e6c;border-radius:50%;position:absolute
 }
 .heart::before{left:-10px;top:0;}
 .heart::after{left:0;top:-10px;}
@@ -32,39 +28,34 @@ position:absolute
 0%{opacity:0;bottom:0;transform:rotate(45deg) scale(.5)}
 50%{opacity:1}
 100%{opacity:0;bottom:100vh;transform:rotate(45deg) scale(1.2)}
-}
-.text-box{
-position:absolute;
-top:50%;left:50%;
-transform:translate(-50%,-50%);
-text-align:center;
-z-index:99
+}.text-box{
+position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+text-align:center;z-index:99
 }
 .title{
-font-size:40px;
-font-weight:bold;
-color:#fff;
-text-shadow:0 0 15px #ff3e6c;
-opacity:0;
-animation:fadeIn 2s forwards 1s
+font-size:40px;font-weight:bold;color:#fff;text-shadow:0 0 15px #ff3e6c;
+opacity:0;animation:fadeIn 2s forwards 1s
 }
 .sub-title{
-font-size:20px;
-color:#fff;
-margin-top:10px;
-opacity:0;
-animation:fadeIn 2s forwards 2s
+font-size:20px;color:#fff;margin-top:10px;
+opacity:0;animation:fadeIn 2s forwards 2s
 }
 .click-heart{
-width:70px;height:70px;
-background:#ff3e6c;
-transform:rotate(45deg);
-margin:30px auto;
-cursor:pointer;
-box-shadow:0 0 20px #ff3e6c;
-opacity:0;
-animation:fadeIn 1.5s forwards 3s
+width:70px;height:70px;background:#ff3e6c;transform:rotate(45deg);
+margin:30px auto;cursor:pointer;box-shadow:0 0 20px #ff3e6c;
+opacity:0;animation:fadeIn 1.5s forwards 3s;transition:all .3s
 }
+.click-heart:hover{transform:rotate(45deg) scale(1.1);box-shadow:0 0 40px #ff3e6c}
+.btn{
+padding:12px 24px;margin:8px;border-radius:30px;border:none;
+font-size:16px;font-weight:bold;cursor:pointer;transition:all .3s;
+opacity:0;animation:fadeIn 1s forwards calc(3s + var(--d))
+}
+.btn1{background:#ff3e6c;color:#fff;box-shadow:0 0 15px #ff3e6c;--d:0.2s}
+.btn2{background:#a18cd1;color:#fff;box-shadow:0 0 15px #a18cd1;--d:0.4s}
+.btn3{background:#fbc2eb;color:#333;box-shadow:0 0 15px #fbc2eb;--d:0.6s}
+.btn4{background:#fad0c4;color:#333;box-shadow:0 0 15px #fad0c4;--d:0.8s}
+.btn:hover{transform:scale(1.05);box-shadow:0 0 25px currentColor}
 @keyframes fadeIn{to{opacity:1}}
 </style>
 </head>
@@ -73,19 +64,38 @@ animation:fadeIn 1.5s forwards 3s
 <div class="text-box">
 <h1 class="title">林泽洋，我喜欢你</h1>
 <p class="sub-title">我的世界，只为你心动</p>
-<div class="click-heart" onclick="show()"></div>
+<div class="click-heart" onclick="showMain()"></div>
+<div class="btns"><button class="btn btn1" onclick="showLetter()">💌 专属告白信</button>
+<button class="btn btn2" onclick="askLove()">❤️ 做我对象吗？</button>
+<button class="btn btn3" onclick="showMoments()">✨ 我喜欢你的瞬间</button>
+<button class="btn btn4" onclick="toggleBGM()">🎵 控制BGM</button>
+</div>
 </div>
 <script>
 setInterval(()=>{
-let h=document.createElement('div');
-h.className='heart';
-h.style.left=Math.random()*100+'vw';
-document.body.appendChild(h);
+let h=document.createElement('div');h.className='heart';
+h.style.left=Math.random()*100+'vw';document.body.appendChild(h);
 setTimeout(()=>h.remove(),5000)
 },300);
-function show(){
-document.getElementById('bgm').play();
-alert('林泽洋，遇见你很幸运，我想和你在一起❤️')
+const bgm=document.getElementById('bgm');
+function showMain(){
+bgm.play();
+alert('林泽洋：\n遇见你之后，我才明白什么是满心欢喜\n往后的每一天，我都想陪在你身边\n你愿意给我一个机会吗？❤️')
+}
+function showLetter(){
+alert('致林泽洋：\n\n从第一次见到你，我的目光就再也离不开\n你笑起来的样子、认真的样子、发呆的样子\n都刻在我的心里\n我不想再只做朋友，我想做那个能陪你走过春夏秋冬的人\n林泽洋，我喜欢你，很久了')
+}
+function askLove(){
+let res=confirm('林泽洋，你愿意做我的对象吗？\n（确定=答应，取消=再想想）');
+if(res){alert('太好了！林泽洋，以后请多多指教啦❤️');}
+else{alert('没关系，我会等你，直到你愿意的那一天💔');}
+}
+function showMoments(){
+alert('关于林泽洋，我喜欢的瞬间：\n1. 你笑起来眼睛弯弯的样子\n2. 你认真做事的专注\n3. 你不经意的温柔\n4. 每一个和你有关的瞬间\n林泽洋，你就是我的全世界')
+}
+function toggleBGM(){
+bgm.paused?bgm.play():bgm.pause();
+alert(bgm.paused?'BGM已暂停⏸️':'BGM已播放🎵《嘉宾》');
 }
 </script>
 </body>
