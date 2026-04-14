@@ -3,72 +3,90 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>林泽洋 专属心动</title>
+<title>林泽洋 · 专属心动告白</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{
 background:#000;color:#fff;
-font-family:微软雅黑;
+font-family:"微软雅黑", "PingFang SC", sans-serif;
 text-align:center;
-padding:15vh 20px;
+padding:12vh 20px;
 overflow-x:hidden;
 min-height:100vh;
+position:relative;
 }
 .name{
-font-size:5rem;
-color:#ff5e99;
-font-weight:bold;
-text-shadow:0 0 20px #ff5e99, 0 0 40px #ff5e99;
-animation:fadeIn 2s ease forwards;
+font-size:5.5rem;
+background:linear-gradient(45deg,#ff4081,#ffd700,#ff4081);
+-webkit-background-clip:text;
+background-clip:text;
+color:transparent;
+font-weight:900;
+text-shadow:0 0 30px rgba(255,64,129,0.9), 0 0 60px rgba(255,64,129,0.7);
+opacity:0;
+transform:scale(0.8) translateY(50px);
+animation:nameFadeIn 2.5s ease-out forwards;
 }
 .text{
-font-size:1.8rem;
-margin:30px 0 50px;
-line-height:2;
+font-size:1.9rem;
+margin:35px 0 60px;
+line-height:2.2;
 opacity:0;
-animation:fadeIn 2s ease forwards 1.5s;
+transform:translateY(40px);
+animation:textFadeIn 2.5s ease-out forwards 1.8s;
 }
 .btn{
 display:inline-block;
-width:160px;
-padding:16px 0;
-margin:0 15px 20px;
-font-size:20px;
+width:170px;
+padding:17px 0;
+margin:0 18px 25px;
+font-size:21px;
 border:none;
-border-radius:40px;
+border-radius:45px;
 cursor:pointer;
-transition:all 0.3s ease;
+transition:all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+font-weight:bold;
 }
 .btn-yes{
-background:linear-gradient(45deg,#ff5e99,#ffd700);
+background:linear-gradient(45deg,#ff4081,#ff6b6b,#ffd700);
 color:#fff;
-box-shadow:0 0 25px rgba(255,94,153,0.9);
+box-shadow:0 0 30px rgba(255,64,129,0.9), 0 0 60px rgba(255,64,129,0.6);
+transform:scale(1.05);
 }
 .btn-more{
-background:#222;
+background:#1a1a2e;
 color:#fff;
-border:2px solid #ff5e99;
-box-shadow:0 0 15px rgba(255,94,153,0.6);
+border:3px solid #ff4081;
+box-shadow:0 0 20px rgba(255,64,129,0.5);
 }
 .btn-music{
 position:fixed;
-top:20px;
-right:20px;
-width:50px;
-height:50px;
+top:25px;
+right:25px;
+width:55px;
+height:55px;
 border-radius:50%;
-background:#ff5e99;
+background:linear-gradient(45deg,#ff4081,#ffd700);
 color:#fff;
-font-size:24px;
+font-size:26px;
 border:none;
 cursor:pointer;
-box-shadow:0 0 15px rgba(255,94,153,0.8);
-z-index:999;
+box-shadow:0 0 20px rgba(255,64,129,0.8);
+z-index:9999;
+transition:all 0.3s ease;
 }
-@keyframes fadeIn{
-from{opacity:0;transform:translateY(30px)}
-to{opacity:1;transform:translateY(0)}
+.hint{
+position:absolute;
+bottom:60px;
+left:50%;
+transform:translateX(-50%);
+color:rgba(255,255,255,0.6);
+font-size:1.1rem;
+animation:pulse 2.5s infinite ease-in-out;
 }
+@keyframes nameFadeIn{to{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes textFadeIn{to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:0.5}50%{opacity:1}}
 canvas{
 position:fixed;
 top:0;left:0;
@@ -79,14 +97,11 @@ z-index:-1;
 </style>
 </head>
 <body>
-<!-- 背景音乐：《嘉宾》原版可商用链接，循环播放 -->
+<!-- 《嘉宾》BGM 循环播放 -->
 <audio id="bgMusic" loop preload="auto">
   <source src="https://music.163.com/song/media/outer/url?id=1387579933.mp3" type="audio/mpeg">
 
-
-<!-- 音乐控制按钮 -->
 <button class="btn-music" id="musicBtn" onclick="toggleMusic()">🎵</button>
-
 <canvas id="heartCanvas"></canvas>
 <div class="name">林泽洋</div>
 <div class="text">
@@ -98,13 +113,13 @@ z-index:-1;
 <button class="btn btn-more" id="btnMore1">查看更多心意</button>
 <button class="btn btn-more" id="btnMore2">再等等我</button>
 
-<script>
-// 音乐控制（《嘉宾》循环播放）
+<div class="hint">点击「我愿意」，解锁我的全部温柔
+</div><script>
+// 音乐控制（《嘉宾》播放/暂停）
 const bgMusic = document.getElementById('bgMusic');
 const musicBtn = document.getElementById('musicBtn');
 let isPlaying = false;
 
-// 切换音乐播放/暂停
 function toggleMusic() {
   if(isPlaying) {
     bgMusic.pause();
@@ -116,7 +131,7 @@ function toggleMusic() {
   isPlaying = !isPlaying;
 }
 
-// 按钮点击事件（100%兼容APK）
+// 按钮点击事件（APK100%兼容）
 const btnYes = document.getElementById('btnYes');
 const btnMore1 = document.getElementById('btnMore1');
 const btnMore2 = document.getElementById('btnMore2');
@@ -131,14 +146,14 @@ btnMore2.addEventListener('click', function() {
   alert('没关系，我会一直等你，直到你点头为止💌');
 });
 
-// 页面点击触发音乐（解决浏览器自动播放限制）
+// 解决浏览器自动播放限制
 document.body.addEventListener('click', function() {
   if(!isPlaying) {
     bgMusic.play();
     musicBtn.textContent = '🎵';
     isPlaying = true;
   }
-});// 爱心粒子动画（APK/PWA双兼容）
+}, {once: true});// 爱心粒子动画（APK/PWA双兼容）
 const canvas = document.getElementById('heartCanvas');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
