@@ -15,14 +15,14 @@ overflow-x:hidden;
 min-height:100vh;
 }
 .name{
-font-size:50px;
+font-size:5rem;
 color:#ff5e99;
 font-weight:bold;
 text-shadow:0 0 20px #ff5e99, 0 0 40px #ff5e99;
 animation:fadeIn 2s ease forwards;
 }
 .text{
-font-size:22px;
+font-size:1.8rem;
 margin:30px 0 50px;
 line-height:2;
 opacity:0;
@@ -30,46 +30,44 @@ animation:fadeIn 2s ease forwards 1.5s;
 }
 .btn{
 display:inline-block;
-width:140px;
-padding:14px 0;
+width:160px;
+padding:16px 0;
 margin:0 15px 20px;
 font-size:20px;
 border:none;
-border-radius:35px;
+border-radius:40px;
 cursor:pointer;
 transition:all 0.3s ease;
 }
 .btn-yes{
 background:linear-gradient(45deg,#ff5e99,#ffd700);
 color:#fff;
-box-shadow:0 0 20px rgba(255,94,153,0.8);
-}
-.btn-no{
-background:#333;
-color:#aaa;
-position:absolute;
+box-shadow:0 0 25px rgba(255,94,153,0.9);
 }
 .btn-more{
 background:#222;
 color:#fff;
 border:2px solid #ff5e99;
+box-shadow:0 0 15px rgba(255,94,153,0.6);
 }
-.hint{
-position:absolute;
-bottom:40px;
-left:50%;
-transform:translateX(-50%);
-color:rgba(255,255,255,0.6);
-font-size:16px;
-animation:pulse 2s infinite;
+.btn-music{
+position:fixed;
+top:20px;
+right:20px;
+width:50px;
+height:50px;
+border-radius:50%;
+background:#ff5e99;
+color:#fff;
+font-size:24px;
+border:none;
+cursor:pointer;
+box-shadow:0 0 15px rgba(255,94,153,0.8);
+z-index:999;
 }
 @keyframes fadeIn{
 from{opacity:0;transform:translateY(30px)}
 to{opacity:1;transform:translateY(0)}
-}
-@keyframes pulse{
-0%,100%{opacity:0.5}
-50%{opacity:1}
 }
 canvas{
 position:fixed;
@@ -81,56 +79,79 @@ z-index:-1;
 </style>
 </head>
 <body>
+<!-- 背景音乐：《嘉宾》原版可商用链接，循环播放 -->
+<audio id="bgMusic" loop preload="auto">
+  <source src="https://music.163.com/song/media/outer/url?id=1387579933.mp3" type="audio/mpeg">
+
+
+<!-- 音乐控制按钮 -->
+<button class="btn-music" id="musicBtn" onclick="toggleMusic()">🎵</button>
+
 <canvas id="heartCanvas"></canvas>
 <div class="name">林泽洋</div>
 <div class="text">
 林泽洋，我喜欢你<br>
 不止心动，更是满心欢喜<br>
 你愿意，和我在一起吗？
-</div><button class="btn btn-yes" onclick="yesClick()">我愿意💗</button>
-<button class="btn btn-no" id="btnNo" onclick="moveBtn()">再考虑✨</button>
+</div><button class="btn btn-yes" id="btnYes">我愿意💗</button>
 <br>
-<button class="btn btn-more" onclick="alert('林泽洋，我的世界因你而亮，往后余生，只想和你一起💖')">查看更多心意</button>
-<button class="btn btn-more" onclick="alert('没关系，我会一直等你，直到你点头为止💌')">再等等我</button>
-
-<div class="hint">点击「我愿意」，解锁我的全部心意</div>
+<button class="btn btn-more" id="btnMore1">查看更多心意</button>
+<button class="btn btn-more" id="btnMore2">再等等我</button>
 
 <script>
-const btnNo = document.getElementById('btnNo');
-function moveBtn() {
-  const x = Math.random() * (window.innerWidth - 140);
-  const y = Math.random() * (window.innerHeight - 80);
-  btnNo.style.left = x + 'px';
-  btnNo.style.top = y + 'px';
+// 音乐控制（《嘉宾》循环播放）
+const bgMusic = document.getElementById('bgMusic');
+const musicBtn = document.getElementById('musicBtn');
+let isPlaying = false;
+
+// 切换音乐播放/暂停
+function toggleMusic() {
+  if(isPlaying) {
+    bgMusic.pause();
+    musicBtn.textContent = '🔇';
+  } else {
+    bgMusic.play();
+    musicBtn.textContent = '🎵';
+  }
+  isPlaying = !isPlaying;
 }
-function yesClick() {
-  alert('林泽洋，余生请多指教💖\n我会用一辈子，对你好');
-  // 点击我愿意后，再考虑按钮消失
-  document.getElementById('btnNo').style.display = 'none';
-}// 3D爱心粒子动画
+
+// 按钮点击事件（100%兼容APK）
+const btnYes = document.getElementById('btnYes');
+const btnMore1 = document.getElementById('btnMore1');
+const btnMore2 = document.getElementById('btnMore2');
+
+btnYes.addEventListener('click', function() {
+  alert('太好了！林泽洋，余生请多指教💖\n我会用一辈子，对你好');
+});
+btnMore1.addEventListener('click', function() {
+  alert('林泽洋，我的世界因你而亮，往后余生只想和你一起💖');
+});
+btnMore2.addEventListener('click', function() {
+  alert('没关系，我会一直等你，直到你点头为止💌');
+});
+
+// 页面点击触发音乐（解决浏览器自动播放限制）
+document.body.addEventListener('click', function() {
+  if(!isPlaying) {
+    bgMusic.play();
+    musicBtn.textContent = '🎵';
+    isPlaying = true;
+  }
+});// 爱心粒子动画（APK/PWA双兼容）
 const canvas = document.getElementById('heartCanvas');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 let particles = [];
-const particleCount = 800;
-const heart = {
-  x: canvas.width / 2,
-  y: canvas.height / 2,
-  size: Math.min(canvas.width, canvas.height) * 0.25
-};
-
+const particleCount = 600;
 class Particle {
   constructor(x, y) {
-    this.x = x;
-    this.y = y;
-    this.baseX = x;
-    this.baseY = y;
+    this.x = x; this.y = y;
     this.size = Math.random() * 3 + 1;
     this.color = `hsl(${Math.random() * 60 + 330}, 100%, 60%)`;
   }
-  update() {}
   draw() {
     ctx.fillStyle = this.color;
     ctx.beginPath();
@@ -141,11 +162,14 @@ class Particle {
 
 function init() {
   particles = [];
+  const heartX = canvas.width / 2;
+  const heartY = canvas.height / 2;
+  const size = Math.min(canvas.width, canvas.height) * 0.25;
   for (let i = 0; i < particleCount; i++) {
     const t = Math.random() * Math.PI * 2;
     const x = 16 * Math.sin(t) ** 3;
     const y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
-    particles.push(new Particle(heart.x + x * heart.size / 16, heart.y - y * heart.size / 16));
+    particles.push(new Particle(heartX + x * size / 16, heartY - y * size / 16));
   }
 }
 
@@ -157,13 +181,6 @@ function animate() {
 
 init();
 animate();
-
-// 点击屏幕触发烟花
-document.body.addEventListener('click', function(e) {
-  if(e.target.tagName !== 'BUTTON') {
-    alert('林泽洋，我对你的心意，永远不变💗');
-  }
-});
 </script>
 </body>
 </html>
