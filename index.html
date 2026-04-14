@@ -2,205 +2,91 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>林泽洋 · 专属心动告白</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>告白</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{
-background:#000;color:#fff;
-font-family:"微软雅黑", "PingFang SC", sans-serif;
-text-align:center;
-padding:12vh 20px;
-overflow-x:hidden;
 min-height:100vh;
-position:relative;
+background:linear-gradient(135deg,#ff9a9e,#fad0c4,#a18cd1,#fbc2eb);
+overflow:hidden;
+font-family:"Microsoft YaHei",sans-serif
 }
-.name{
-font-size:5.5rem;
-background:linear-gradient(45deg,#ff4081,#ffd700,#ff4081);
--webkit-background-clip:text;
-background-clip:text;
-color:transparent;
-font-weight:900;
-text-shadow:0 0 30px rgba(255,64,129,0.9), 0 0 60px rgba(255,64,129,0.7);
-opacity:0;
-transform:scale(0.8) translateY(50px);
-animation:nameFadeIn 2.5s ease-out forwards;
-}
-.text{
-font-size:1.9rem;
-margin:35px 0 60px;
-line-height:2.2;
-opacity:0;
-transform:translateY(40px);
-animation:textFadeIn 2.5s ease-out forwards 1.8s;
-}
-.btn{
-display:inline-block;
-width:170px;
-padding:17px 0;
-margin:0 18px 25px;
-font-size:21px;
-border:none;
-border-radius:45px;
-cursor:pointer;
-transition:all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-font-weight:bold;
-}
-.btn-yes{
-background:linear-gradient(45deg,#ff4081,#ff6b6b,#ffd700);
-color:#fff;
-box-shadow:0 0 30px rgba(255,64,129,0.9), 0 0 60px rgba(255,64,129,0.6);
-transform:scale(1.05);
-}
-.btn-more{
-background:#1a1a2e;
-color:#fff;
-border:3px solid #ff4081;
-box-shadow:0 0 20px rgba(255,64,129,0.5);
-}
-.btn-music{
-position:fixed;
-top:25px;
-right:25px;
-width:55px;
-height:55px;
-border-radius:50%;
-background:linear-gradient(45deg,#ff4081,#ffd700);
-color:#fff;
-font-size:26px;
-border:none;
-cursor:pointer;
-box-shadow:0 0 20px rgba(255,64,129,0.8);
-z-index:9999;
-transition:all 0.3s ease;
-}
-.hint{
+.heart{
 position:absolute;
-bottom:60px;
-left:50%;
-transform:translateX(-50%);
-color:rgba(255,255,255,0.6);
-font-size:1.1rem;
-animation:pulse 2.5s infinite ease-in-out;
+width:20px;height:20px;
+background:#ff3e6c;
+transform:rotate(45deg);
+animation:float 3s infinite
 }
-@keyframes nameFadeIn{to{opacity:1;transform:scale(1) translateY(0)}}
-@keyframes textFadeIn{to{opacity:1;transform:translateY(0)}}
-@keyframes pulse{0%,100%{opacity:0.5}50%{opacity:1}}
-canvas{
-position:fixed;
-top:0;left:0;
-width:100%;height:100%;
-pointer-events:none;
-z-index:-1;
+.heart::before,.heart::after{
+content:'';
+width:20px;height:20px;
+background:#ff3e6c;
+border-radius:50%;
+position:absolute
 }
+.heart::before{left:-10px;top:0;}
+.heart::after{left:0;top:-10px;}
+@keyframes float{
+0%{opacity:0;bottom:0;transform:rotate(45deg) scale(.5)}
+50%{opacity:1}
+100%{opacity:0;bottom:100vh;transform:rotate(45deg) scale(1.2)}
+}
+.text-box{
+position:absolute;
+top:50%;left:50%;
+transform:translate(-50%,-50%);
+text-align:center;
+z-index:99
+}
+.title{
+font-size:40px;
+font-weight:bold;
+color:#fff;
+text-shadow:0 0 15px #ff3e6c;
+opacity:0;
+animation:fadeIn 2s forwards 1s
+}
+.sub-title{
+font-size:20px;
+color:#fff;
+margin-top:10px;
+opacity:0;
+animation:fadeIn 2s forwards 2s
+}
+.click-heart{
+width:70px;height:70px;
+background:#ff3e6c;
+transform:rotate(45deg);
+margin:30px auto;
+cursor:pointer;
+box-shadow:0 0 20px #ff3e6c;
+opacity:0;
+animation:fadeIn 1.5s forwards 3s
+}
+@keyframes fadeIn{to{opacity:1}}
 </style>
 </head>
 <body>
-<!-- 《嘉宾》BGM 循环播放 -->
-<audio id="bgMusic" loop preload="auto">
-  <source src="https://music.163.com/song/media/outer/url?id=1387579933.mp3" type="audio/mpeg">
-
-
-<button class="btn-music" id="musicBtn" onclick="toggleMusic()">🎵</button>
-<canvas id="heartCanvas"></canvas>
-
-<div class="name">林泽洋</div>
-<div class="text">
-林泽洋，我喜欢你<br>
-不止心动，更是满心欢喜<br>
-你愿意，和我在一起吗？
+<audio id="bgm" loop src="https://music.163.com/song/media/outer/url?id=1890745412.mp3">
+<div class="text-box">
+<h1 class="title">林泽洋，我喜欢你</h1>
+<p class="sub-title">我的世界，只为你心动</p>
+<div class="click-heart" onclick="show()"></div>
 </div>
-
-<button class="btn btn-yes" id="btnYes">我愿意💗</button>
-<br>
-<button class="btn btn-more" id="btnMore1">查看更多心意</button>
-<button class="btn btn-more" id="btnMore2">再等等我</button>
-
-<div class="hint">点击「我愿意」，解锁我的全部温柔</div>
 <script>
-// 音乐控制（《嘉宾》播放/暂停）
-const bgMusic = document.getElementById('bgMusic');
-const musicBtn = document.getElementById('musicBtn');
-let isPlaying = false;
-
-function toggleMusic() {
-  if(isPlaying) {
-    bgMusic.pause();
-    musicBtn.textContent = '🔇';
-  } else {
-    bgMusic.play();
-    musicBtn.textContent = '🎵';
-  }
-  isPlaying = !isPlaying;
+setInterval(()=>{
+let h=document.createElement('div');
+h.className='heart';
+h.style.left=Math.random()*100+'vw';
+document.body.appendChild(h);
+setTimeout(()=>h.remove(),5000)
+},300);
+function show(){
+document.getElementById('bgm').play();
+alert('林泽洋，遇见你很幸运，我想和你在一起❤️')
 }
-
-// 按钮点击事件（APK100%兼容）
-const btnYes = document.getElementById('btnYes');
-const btnMore1 = document.getElementById('btnMore1');
-const btnMore2 = document.getElementById('btnMore2');
-
-btnYes.addEventListener('click', function() {
-  alert('太好了！林泽洋，余生请多指教💖\n我会用一辈子，对你好');
-});
-btnMore1.addEventListener('click', function() {
-  alert('林泽洋，我的世界因你而亮，往后余生只想和你一起💖');
-});
-btnMore2.addEventListener('click', function() {
-  alert('没关系，我会一直等你，直到你点头为止💌');
-});
-
-// 解决浏览器自动播放限制
-document.body.addEventListener('click', function() {
-  if(!isPlaying) {
-    bgMusic.play();
-    musicBtn.textContent = '🎵';
-    isPlaying = true;
-  }
-}, {once: true});
-// 爱心粒子动画（APK/PWA双兼容）
-const canvas = document.getElementById('heartCanvas');
-const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-let particles = [];
-const particleCount = 600;
-class Particle {
-  constructor(x, y) {
-    this.x = x; this.y = y;
-    this.size = Math.random() * 3 + 1;
-    this.color = `hsl(${Math.random() * 60 + 330}, 100%, 60%)`;
-  }
-  draw() {
-    ctx.fillStyle = this.color;
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-    ctx.fill();
-  }
-}
-
-function init() {
-  particles = [];
-  const heartX = canvas.width / 2;
-  const heartY = canvas.height / 2;
-  const size = Math.min(canvas.width, canvas.height) * 0.25;
-  for (let i = 0; i < particleCount; i++) {
-    const t = Math.random() * Math.PI * 2;
-    const x = 16 * Math.sin(t) ** 3;
-    const y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
-    particles.push(new Particle(heartX + x * size / 16, heartY - y * size / 16));
-  }
-}
-
-function animate() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  for (let p of particles) p.draw();
-  requestAnimationFrame(animate);
-}
-
-init();
-animate();
 </script>
 </body>
 </html>
